@@ -186,6 +186,13 @@ p{margin:0}
 .rng{display:grid;gap:6px}
 .rng .top{display:flex;justify-content:space-between;font-size:15px}
 .rng output{font-weight:600}
+/* width/height: tap the number to type it (numeric keypad on phones) */
+.rng .num{display:inline-flex;align-items:baseline;gap:4px;font-weight:600}
+.rng .num input{width:4.6ch;padding:0 2px 1px;border:0;border-bottom:1px dashed #86868B;border-radius:0;background:transparent;
+  font-size:16px;font-weight:600;text-align:right;-moz-appearance:textfield;appearance:textfield;cursor:text}
+.rng .num input::-webkit-outer-spin-button,.rng .num input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.rng .num input:hover{border-bottom-color:var(--ink)}
+.rng .num input:focus{outline:none;border-bottom:2px solid var(--link);padding-bottom:0}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;cursor:pointer;--p:50%}
 input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--link) var(--p),var(--hair) var(--p))}
 input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--link) var(--p),var(--hair) var(--p))}
@@ -462,10 +469,10 @@ footer{background:var(--mist);font-size:12px;color:var(--gray);letter-spacing:-.
           <div class="opts two" id="profiles"></div>
         </div>
         <div class="step">
-          <h3>Mere. <span>U metrima.</span></h3>
+          <h3>Mere. <span>U centimetrima.</span></h3>
           <div class="sizes">
-            <div class="rng"><div class="top"><label for="w">Širina</label><output id="wOut" for="w" class="tnum">0,90 m</output></div><input type="range" id="w" min="400" max="1300" step="10" value="900"></div>
-            <div class="rng"><div class="top"><label for="h">Visina</label><output id="hOut" for="h" class="tnum">1,20 m</output></div><input type="range" id="h" min="400" max="2000" step="10" value="1200"></div>
+            <div class="rng"><div class="top"><label for="w">Širina</label><span class="num"><input type="number" id="wNum" class="tnum" inputmode="numeric" enterkeyhint="done" min="40" max="130" step="1" value="90" aria-label="Širina u centimetrima"><span>cm</span></span></div><input type="range" id="w" min="400" max="1300" step="10" value="900"></div>
+            <div class="rng"><div class="top"><label for="h">Visina</label><span class="num"><input type="number" id="hNum" class="tnum" inputmode="numeric" enterkeyhint="done" min="40" max="200" step="1" value="120" aria-label="Visina u centimetrima"><span>cm</span></span></div><input type="range" id="h" min="400" max="2000" step="10" value="1200"></div>
           </div>
         </div>
         <div class="step">
@@ -751,7 +758,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const nf = new Intl.NumberFormat('sr-Latn-RS');
 const nf2 = new Intl.NumberFormat('sr-Latn-RS', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const mt = mm => nf2.format(mm / 1000) + ' m';   /* sizes are kept in mm internally, shown in meters */
+const cm = mm => Math.round(mm / 10) + ' cm';   /* sizes are kept in mm internally, shown in centimeters */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const MAIL = 'pechmis77@gmail.com';
 
@@ -835,7 +842,7 @@ $('#colors').innerHTML = COLORS.map(c =>
 $('#glass').innerHTML = GLASS.map(g =>
   `<div class="opt"><input type="radio" name="glass" id="g-${g.id}" value="${g.id}" ${g.id === st.glass ? 'checked' : ''}><label for="g-${g.id}"><span><b>${g.name}</b><small>${g.sub}</small></span><span class="r">${g.r}</span></label></div>`).join('');
 
-const wIn = $('#w'), hIn = $('#h'), qIn = $('#qty');
+const wIn = $('#w'), hIn = $('#h'), qIn = $('#qty'), wNum = $('#wNum'), hNum = $('#hNum');
 const setP = el => el.style.setProperty('--p', ((el.value - el.min) / (el.max - el.min) * 100) + '%');
 
 function calc() {
@@ -908,8 +915,8 @@ function draw() {
   const dy = y + hh + 30, dx = x + ww + 30;
   o.push(`<g stroke="#86868B" stroke-width=".8" fill="none"><path d="M${x} ${dy}H${x + ww}M${x} ${dy - 5}v10M${x + ww} ${dy - 5}v10"/><path d="M${dx} ${y}V${y + hh}M${dx - 5} ${y}h10M${dx - 5} ${y + hh}h10"/></g>
     <g font-family="Geist, sans-serif" font-size="13" font-weight="500" fill="#1D1D1F">
-    <rect x="${x + ww / 2 - 38}" y="${dy - 11}" width="76" height="22" rx="11" fill="#F5F5F7"/><text x="${x + ww / 2}" y="${dy + 4.5}" text-anchor="middle">${mt(st.w)}</text>
-    <g transform="translate(${dx} ${y + hh / 2}) rotate(-90)"><rect x="-38" y="-11" width="76" height="22" rx="11" fill="#F5F5F7"/><text y="4.5" text-anchor="middle">${mt(st.h)}</text></g></g>`);
+    <rect x="${x + ww / 2 - 38}" y="${dy - 11}" width="76" height="22" rx="11" fill="#F5F5F7"/><text x="${x + ww / 2}" y="${dy + 4.5}" text-anchor="middle">${cm(st.w)}</text>
+    <g transform="translate(${dx} ${y + hh / 2}) rotate(-90)"><rect x="-38" y="-11" width="76" height="22" rx="11" fill="#F5F5F7"/><text y="4.5" text-anchor="middle">${cm(st.h)}</text></g></g>`);
   if (st.qty > 1) o.push(`<g font-family="Geist, sans-serif"><rect x="510" y="20" width="64" height="30" rx="15" fill="#E3171B"/><text x="542" y="40" text-anchor="middle" font-size="14" font-weight="600" fill="#fff">× ${st.qty}</text></g>`);
   svg.innerHTML = o.join('');
 }
@@ -920,7 +927,9 @@ function render(kick) {
   st.w = Math.min(Math.max(st.w, T.w[0]), T.w[1]); st.h = Math.min(Math.max(st.h, T.h[0]), T.h[1]);
   wIn.value = st.w; hIn.value = st.h; qIn.value = st.qty; setP(wIn); setP(hIn); setP(qIn);
   const r = calc();
-  $('#wOut').textContent = mt(st.w); $('#hOut').textContent = mt(st.h);
+  wNum.min = T.w[0] / 10; wNum.max = T.w[1] / 10; hNum.min = T.h[0] / 10; hNum.max = T.h[1] / 10;
+  if (document.activeElement !== wNum) wNum.value = Math.round(st.w / 10);
+  if (document.activeElement !== hNum) hNum.value = Math.round(st.h / 10);
   $('#qOut').textContent = st.qty + ' kom';
   $('#colorName').innerHTML = `${r.C.name} <span>· ${r.C.ral}</span>`;
   $('#cap').textContent = `${T.name} · ${r.P.name} · ${r.C.name} · ${r.G.name} staklo${st.roller ? ' · roletna' : ''}${st.mesh ? ' · komarnik' : ''}${st.blind ? ' · venecijaner' : ''}`;
@@ -944,9 +953,21 @@ $('#cfgForm').addEventListener('input', e => {
   else if (t.id === 'w') { st.w = +t.value; kick = false; }
   else if (t.id === 'h') { st.h = +t.value; kick = false; }
   else if (t.id === 'qty') { st.qty = +t.value; kick = false; }
+  else if (t.id === 'wNum' || t.id === 'hNum') return;   /* typed sizes apply on Enter / leaving the field */
   else if (['roller', 'mesh', 'blind'].includes(t.id)) st[t.id] = t.checked;
   else return;
   render(kick);
+});
+
+/* typed width/height: applied on Enter or blur, clamped to the type's range (render does the clamping) */
+[[wNum, 'w'], [hNum, 'h']].forEach(([el, key]) => {
+  el.addEventListener('focus', () => el.select());
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
+  el.addEventListener('blur', () => {
+    const v = parseFloat(String(el.value).replace(',', '.'));
+    if (Number.isFinite(v)) st[key] = Math.round(v) * 10;
+    render(true);
+  });
 });
 
 /* product tiles preselect a window type */
@@ -960,7 +981,7 @@ $$('[data-topic]').forEach(a => a.addEventListener('click', () => { $('#cTopic')
 /* save + lead */
 const code = () => { const r = calc(); return `PM-${r.T.code}-${r.P.code}-${st.w}×${st.h}-${r.C.code}${st.qty > 1 ? '-x' + st.qty : ''}`; };
 const describe = () => { const r = calc(); return [
-  `Konfiguracija: ${code()}`, `Tip: ${r.T.name}`, `Profil: ${r.P.name}`, `Mere: ${mt(st.w)} × ${mt(st.h)}`, `Količina: ${st.qty} kom`,
+  `Konfiguracija: ${code()}`, `Tip: ${r.T.name}`, `Profil: ${r.P.name}`, `Mere: ${cm(st.w)} × ${cm(st.h)}`, `Količina: ${st.qty} kom`,
   `Boja: ${r.C.name} (${r.C.ral})`, `Staklo: ${r.G.name}`,
   `Dodaci: ${[st.roller && 'ALU roletna', st.mesh && 'komarnik', st.blind && 'venecijaner'].filter(Boolean).join(', ') || 'bez dodataka'}`,
   `Okvirna cena: ${nf.format(r.lo)} – ${nf.format(r.hi)} RSD`].join('\n'); };
