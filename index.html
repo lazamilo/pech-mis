@@ -109,13 +109,14 @@ p{margin:0}
 /* ───── highlights carousel ───── */
 .hl-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:34px}
 .rail{display:grid;grid-auto-flow:column;grid-auto-columns:min(78vw,372px);gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
-  padding-block:6px 30px;padding-left:max(22px,calc((100vw - var(--maxw)) / 2 + 22px));padding-right:max(22px,calc((100vw - var(--maxw)) / 2 + 22px));
+  padding-block:18px 30px;margin-top:-12px;padding-left:max(22px,calc((100vw - var(--maxw)) / 2 + 22px));padding-right:max(22px,calc((100vw - var(--maxw)) / 2 + 22px));
   scroll-padding-left:max(22px,calc((100vw - var(--maxw)) / 2 + 22px));scrollbar-width:none;overscroll-behavior-x:contain}
 .rail::-webkit-scrollbar{display:none}
 .card{scroll-snap-align:start;border-radius:var(--r-lg);background:var(--white);overflow:hidden;display:grid;grid-template-rows:auto 1fr;min-height:540px;
-  box-shadow:0 2px 12px rgba(0,0,0,.04);transition:box-shadow .45s}
-/* hover: deeper shadow + photo zoom only. Scaling the whole card re-rasterizes its text, which looks blurry mid-animation. */
-.card:hover{box-shadow:0 10px 32px rgba(0,0,0,.1)}
+  box-shadow:0 2px 12px rgba(0,0,0,.04);position:relative;top:0;transition:top .45s cubic-bezier(.25,1,.5,1),box-shadow .45s}
+/* hover: the whole card lifts via `top`, not transform. A transform (scale or translate) turns the card into a
+   bitmap layer and its text goes soft mid-animation; moving it with `top` keeps text drawn crisp on every frame. */
+.card:hover{top:-5px;box-shadow:0 14px 34px rgba(0,0,0,.11)}
 .card-media img{transition:transform .8s cubic-bezier(.25,1,.5,1)}
 .card:hover .card-media img{transform:scale(1.04)}
 .card-text{padding:28px 30px 0;display:grid;gap:12px;align-content:start}
