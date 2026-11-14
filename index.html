@@ -149,6 +149,14 @@ p{margin:0}
 /* ───── configurator ───── */
 .cfg{display:grid;gap:40px;margin-top:56px}
 @media (min-width:980px){.cfg{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:56px;align-items:start}}
+/* single column: options first, then the drawing, then the price summary */
+@media (max-width:979px){
+  .cfg{gap:44px}
+  .cfg .steps{display:contents}
+  .cfg .step{order:1;min-width:0}
+  .cfg .stage{order:2}
+  .cfg .summary{order:3}
+}
 .stage{border-radius:var(--r-xl);background:#fff;position:relative;min-width:0}
 @media (min-width:980px){.stage{position:sticky;top:76px}}
 .stage svg{width:100%;height:auto;display:block}
@@ -200,7 +208,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .total{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
 .total strong{font-size:32px;font-weight:600;letter-spacing:-.046em;line-height:1.1}
 .total small{display:block;font-size:13px;color:var(--gray)}
-.sub-note{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;background:#FDECEC;font-size:14px;color:#7A0B0D}
+.sub-note{display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline;padding:12px 14px;border-radius:12px;background:#FDECEC;font-size:14px;color:#7A0B0D}
 .sub-note b{font-weight:600}
 .sum-act{display:grid;gap:10px}
 .sum-act .btn{width:100%;background:var(--brand)}
@@ -494,7 +502,7 @@ footer{background:var(--mist);font-size:12px;color:var(--gray);letter-spacing:-.
           <div class="sum-row"><span>Zvučna izolacija</span><b class="tnum" id="sRw">Rw 35 dB</b></div>
           <div class="sum-row"><span>Okov</span><b id="sHw">ROTO NX</b></div>
           <div class="total"><div><small id="sPer">Okvirna cena sa PDV-om</small><strong class="tnum" id="sPrice">24.900 RSD</strong></div><small class="tnum" id="sRange">do 28.400 RSD</small></div>
-          <div class="sub-note" id="subNote"><b>Sa subvencijom do 50%:</b>&nbsp;<span class="tnum" id="sSub">od 12.450 RSD</span></div>
+          <div class="sub-note" id="subNote"><b>Sa subvencijom do 50%:</b><span class="tnum" id="sSub">od 12.450 RSD</span></div>
           <div class="sum-act" id="act">
             <button type="button" class="btn" id="askBtn">Zakaži besplatno merenje</button>
             <button type="button" class="btn light" id="saveBtn">Sačuvaj konfiguraciju</button>
