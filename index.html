@@ -111,7 +111,17 @@ p{margin:0}
 /* highlights: 3 × 2 grid inside the same 1260px column as the hero photos */
 .hl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 @media (max-width:979px){.hl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:639px){.hl-grid{grid-template-columns:1fr}.hl-grid .card{min-height:0}.hl-grid .card.stat .card-media{padding-top:28px}}
+/* phones: cards become a swipeable row that bleeds to the screen edges, next card peeking in */
+@media (max-width:639px){
+  .hl-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:84%;gap:12px;
+    overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    margin-left:calc(-1 * max(22px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(22px,env(safe-area-inset-right,0px)));
+    padding:0 max(22px,env(safe-area-inset-right,0px)) 4px max(22px,env(safe-area-inset-left,0px));
+    scroll-padding-left:max(22px,env(safe-area-inset-left,0px))}
+  .hl-grid::-webkit-scrollbar{display:none}
+  .hl-grid .card{min-height:0;scroll-snap-align:start}
+  .hl-grid .card.stat .card-media{padding-top:28px}
+}
 .card{border-radius:var(--r-lg);background:var(--white);overflow:hidden;display:grid;grid-template-rows:auto 1fr;min-height:540px;
   box-shadow:0 2px 12px rgba(0,0,0,.04)}
 .card-text{padding:28px 30px 0;display:grid;gap:12px;align-content:start}
@@ -385,7 +395,7 @@ footer{background:var(--mist);font-size:12px;color:var(--gray);letter-spacing:-.
 <section class="band mist" style="margin-top:clamp(80px,10vw,120px)" aria-labelledby="hlTitle">
   <div class="wrap wide">
   <h2 class="h2 hl-head" id="hlTitle">Najvažnije, ukratko.</h2>
-  <div class="hl-grid">
+  <div class="hl-grid" aria-label="Najvažnije karakteristike">
     <article class="card">
       <div class="card-text"><small>Energetska efikasnost</small><h3>Topliji dom. Niži računi.</h3><p class="muted">Najveći rasipnici energije su dotrajali prozori. Zamena je prvi korak ka manjim računima za grejanje.</p></div>
       <div class="card-media"><img src="img/balkonska.jpg" alt="Nova bela balkonska vrata na porodičnoj kući" loading="lazy"></div>
